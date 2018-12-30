@@ -7,16 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Models
 {
-    public class FoodLogEntry
+    public class Muscle
     {
         [Key] public string Id { get; set; }
 
-        public DateTime Timestamp { get; set; }
-
-        public Food Food { get; set; }
-
-        public double ServingAmount { get; set; }
-
-        // public object BreakFastLunchDinnerSnack { get; set; }
+        public string Name { get; set; }
     }
 }
