@@ -11,6 +11,8 @@ namespace FitnessTracker.Models
     {
         public DbSet<User> Users { get; set; }
 
+        public DbSet<WeightLogEntry> Weights { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=blogging.db");

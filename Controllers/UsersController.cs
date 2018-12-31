@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FitnessTracker.Models;
+using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace FitnessTracker.Controllers
 {
@@ -11,9 +13,91 @@ namespace FitnessTracker.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult<User> Get()
+        [HttpGet("{id}")]
+        public ActionResult<ApiModels.User> Get(int id)
+        {
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var user = db.Users
+                        .Where(x => x.Id == id)
+                        .Select(x => new { x.Id, x.FirstName, x.LastName })
+                        .ToList()[0];
+
+                    return new ApiModels.User
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        HeightLogEntries = $"{this.Request.Scheme}:{this.Request.Host}/api/users/1/heightlogentries",
+                        WeightLogEntries = $"{this.Request.Scheme}:{this.Request.Host}/api/users/1/weightlogentries",
+                        FoodLogEntries = $"{this.Request.Scheme}:{this.Request.Host}/api/users/1/foodlogentries",
+                        ExerciseLogEntries = $"{this.Request.Scheme}:{this.Request.Host}/api/users/1/exerciselogentries"
+                    };
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return StatusCode(404);
+                }
+            }
+        }
+
+        [HttpGet("{id}/weightlogentries")]
+        public ActionResult<ApiModels.WeightLogEntries> GetWeightHistory(int id)
+        {
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var user = db.Users
+                        .Where(x => x.Id == id)
+                        .Select(x => new { x.Weights })
+                        .ToList()[0];
+
+                    var rv = new ApiModels.WeightLogEntries();
+                    rv.Entries = new List<ApiModels.WeightLogEntry>();
+
+                    foreach (var weightLogEntry in user.Weights)
+                    {
+                        rv.Entries.Add(new ApiModels.WeightLogEntry
+                        {
+                            Timestamp = weightLogEntry.Timestamp.ToString(),
+                            Value = weightLogEntry.Weight
+                        });
+                    }
+
+                    return rv;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return StatusCode(404);
+                }
+            }
+        }
+
+        [HttpPost("{id}/weightlogentries")]
+        public ActionResult CreateWeightLogEntry(
+            [FromBody] ApiModels.WeightLogEntry weightLogEntry)
+        {
+            using (var db = new UserContext())
+            {
+                var myWeight = new WeightLogEntry
+                {
+                    Timestamp = DateTime.Parse(weightLogEntry.Timestamp),
+                    Weight = weightLogEntry.Value,
+                    UserId = Convert.ToInt32(this.ControllerContext.RouteData.Values["id"])
+                };
+
+                db.Weights.Add(myWeight);
+                db.SaveChanges();
+            }
+
+            return StatusCode(201);
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<User> Put(int id)
         {
             using (var db = new UserContext())
             {
@@ -26,37 +110,6 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        // GET api/users/5
-        [HttpGet("{id}")]
-        public ActionResult<User> Get(int id)
-        {
-            return null;
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public ActionResult<User> Put(int id)
-        {
-            using (var db = new UserContext())
-            {
-                try
-                {
-                    return db.Users.Where(x => x.Id == id).ToList()[0];
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    return StatusCode(404);
-                }
-            }
-        }
-
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public StatusCodeResult Delete(int id)
         {

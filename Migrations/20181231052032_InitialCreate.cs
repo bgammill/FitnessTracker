@@ -171,24 +171,24 @@ namespace FitnessTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WeightLogEntry",
+                name: "Weights",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Timestamp = table.Column<DateTime>(nullable: false),
                     Weight = table.Column<double>(nullable: false),
-                    UserId = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeightLogEntry", x => x.Id);
+                    table.PrimaryKey("PK_Weights", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WeightLogEntry_Users_UserId",
+                        name: "FK_Weights_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -232,8 +232,8 @@ namespace FitnessTracker.Migrations
                 column: "ExerciseId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WeightLogEntry_UserId",
-                table: "WeightLogEntry",
+                name: "IX_Weights_UserId",
+                table: "Weights",
                 column: "UserId");
         }
 
@@ -255,7 +255,7 @@ namespace FitnessTracker.Migrations
                 name: "Muscle");
 
             migrationBuilder.DropTable(
-                name: "WeightLogEntry");
+                name: "Weights");
 
             migrationBuilder.DropTable(
                 name: "Food");

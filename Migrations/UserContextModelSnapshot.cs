@@ -163,7 +163,7 @@ namespace FitnessTracker.Migrations
 
                     b.Property<DateTime>("Timestamp");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.Property<double>("Weight");
 
@@ -171,7 +171,7 @@ namespace FitnessTracker.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WeightLogEntry");
+                    b.ToTable("Weights");
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.ExerciseLogEntry", b =>
@@ -224,9 +224,10 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.WeightLogEntry", b =>
                 {
-                    b.HasOne("FitnessTracker.Models.User")
+                    b.HasOne("FitnessTracker.Models.User", "User")
                         .WithMany("Weights")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
