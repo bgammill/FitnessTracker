@@ -30,6 +30,19 @@ namespace FitnessTracker.Controllers
         [HttpGet("{id}")]
         public ActionResult<User> Get(int id)
         {
+            return null;
+        }
+
+        // POST api/values
+        [HttpPost]
+        public void Post([FromBody] string value)
+        {
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public ActionResult<User> Put(int id)
+        {
             using (var db = new UserContext())
             {
                 try
@@ -43,21 +56,9 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public StatusCodeResult Delete(int id)
         {
             using (var db = new UserContext())
             {
