@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using FitnessTracker.Models;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
+using FitnessTracker.Models.Enums;
 
 namespace FitnessTracker.Controllers
 {
@@ -13,8 +14,46 @@ namespace FitnessTracker.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        [HttpGet]
+        public ActionResult<ApiModels.Users> GetAllUsers()
+        {
+            using (var db = new UserContext())
+            {
+                try
+                {
+                    var users = db.Users
+                        .Select(x => new { x.Id, x.FirstName, x.LastName })
+                        .ToList();
+
+                    var rv = new ApiModels.Users();
+                    rv.UserList = new List<ApiModels.User>();
+
+                    foreach (var user in users)
+                    {
+                        rv.UserList.Add(
+                            new ApiModels.User
+                            {
+                                Id = user.Id,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
+                                HeightLogEntries = $"{this.Request.Scheme}:{this.Request.Host}/api/users/{user.Id}/heightlogentries",
+                                WeightLogEntries = $"{this.Request.Scheme}:{this.Request.Host}/api/users/{user.Id}/weightlogentries",
+                                FoodLogEntries = $"{this.Request.Scheme}:{this.Request.Host}/api/users/{user.Id}/foodlogentries",
+                                ExerciseLogEntries = $"{this.Request.Scheme}:{this.Request.Host}/api/users/{user.Id}/exerciselogentries"
+                            });
+                    }
+
+                    return rv;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return StatusCode(404);
+                }
+            }
+        }
+
         [HttpGet("{id}")]
-        public ActionResult<ApiModels.User> Get(int id)
+        public ActionResult<ApiModels.User> GetUser(int id)
         {
             using (var db = new UserContext())
             {
@@ -43,75 +82,24 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [HttpGet("{id}/weightlogentries")]
-        public ActionResult<ApiModels.WeightLogEntries> GetWeightHistory(int id)
+        [HttpPost]
+        public ActionResult<User> PostNewUser([FromBody] ApiModels.User user)
         {
+            var myUser = new User();
+            myUser.FirstName = user.FirstName;
+            myUser.LastName = user.LastName;
+            myUser.Email = user.Email;
+
             using (var db = new UserContext())
             {
-                try
-                {
-                    var user = db.Users
-                        .Where(x => x.Id == id)
-                        .Select(x => new { x.Weights })
-                        .ToList()[0];
-
-                    var rv = new ApiModels.WeightLogEntries();
-                    rv.Entries = new List<ApiModels.WeightLogEntry>();
-
-                    foreach (var weightLogEntry in user.Weights)
-                    {
-                        rv.Entries.Add(new ApiModels.WeightLogEntry
-                        {
-                            Timestamp = weightLogEntry.Timestamp.ToString(),
-                            Value = weightLogEntry.Weight
-                        });
-                    }
-
-                    return rv;
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    return StatusCode(404);
-                }
-            }
-        }
-
-        [HttpPost("{id}/weightlogentries")]
-        public ActionResult CreateWeightLogEntry(
-            [FromBody] ApiModels.WeightLogEntry weightLogEntry)
-        {
-            using (var db = new UserContext())
-            {
-                var myWeight = new WeightLogEntry
-                {
-                    Timestamp = DateTime.Parse(weightLogEntry.Timestamp),
-                    Weight = weightLogEntry.Value,
-                    UserId = Convert.ToInt32(this.ControllerContext.RouteData.Values["id"])
-                };
-
-                db.Weights.Add(myWeight);
-                db.SaveChanges();
-            }
-
-            return StatusCode(201);
-        }
-
-        [HttpPut("{id}")]
-        public ActionResult<User> Put(int id)
-        {
-            using (var db = new UserContext())
-            {
-                var myUser = new User { FirstName = "Craig", LastName = "Carr" };
-
                 db.Users.Add(myUser);
-                var count = db.SaveChanges();
-
+                db.SaveChanges();
                 return myUser;
             }
         }
 
         [HttpDelete("{id}")]
-        public StatusCodeResult Delete(int id)
+        public StatusCodeResult DeleteUser(int id)
         {
             using (var db = new UserContext())
             {

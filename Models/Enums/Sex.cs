@@ -5,12 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessTracker.Models
+namespace FitnessTracker.Models.Enums
 {
-    public class Food
+    public enum Sex
     {
-        [Key] public int Id { get; set; }
-
-        [Required] public string Name { get; set; }
+        MALE,
+        FEMALE
     }
 }
