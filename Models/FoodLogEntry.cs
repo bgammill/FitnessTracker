@@ -14,7 +14,9 @@ namespace FitnessTracker.Models
 
         public DateTime Timestamp { get; set; }
 
-        public Food Food { get; set; }
+        public int FoodId { get; set; }
+
+        [ForeignKey("FoodId")] public Food Food { get; set; }
 
         public double ServingAmount { get; set; }
 

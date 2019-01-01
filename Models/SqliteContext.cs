@@ -6,7 +6,10 @@ namespace FitnessTracker.Models
     {
         public DbSet<User> Users { get; set; }
 
+        // TODO Rename to WeightLogEntries
         public DbSet<WeightLogEntry> Weights { get; set; }
+
+        public DbSet<FoodLogEntry> FoodLogEntries { get; set; }
 
         public DbSet<Food> Foods { get; set; }
 

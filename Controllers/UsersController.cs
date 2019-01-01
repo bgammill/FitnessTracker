@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FitnessTracker.DTOs;
 using FitnessTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ namespace FitnessTracker.Controllers
     public class UsersController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<ApiModels.Users> GetAllUsers()
+        public ActionResult<UsersDTO> GetAllUsers()
         {
             using (var db = new SqliteContext())
             {
@@ -21,13 +22,13 @@ namespace FitnessTracker.Controllers
                         .Select(x => new { x.Id, x.FirstName, x.LastName })
                         .ToList();
 
-                    var rv = new ApiModels.Users();
-                    rv.UserList = new List<ApiModels.User>();
+                    var rv = new UsersDTO();
+                    rv.UserList = new List<UserDTO>();
 
                     foreach (var user in users)
                     {
                         rv.UserList.Add(
-                            new ApiModels.User
+                            new UserDTO
                             {
                                 Id = user.Id,
                                 FirstName = user.FirstName,
@@ -49,7 +50,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ApiModels.User> GetUser(int id)
+        public ActionResult<UserDTO> GetUser(int id)
         {
             using (var db = new SqliteContext())
             {
@@ -60,7 +61,7 @@ namespace FitnessTracker.Controllers
                         .Select(x => new { x.Id, x.FirstName, x.LastName })
                         .ToList()[0];
 
-                    return new ApiModels.User
+                    return new UserDTO
                     {
                         Id = user.Id,
                         FirstName = user.FirstName,
@@ -79,8 +80,8 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPost]
-        // TODO Should return ApiModels.User
-        public ActionResult<User> PostNewUser([FromBody] ApiModels.User user)
+        // TODO Should return UserDTO
+        public ActionResult<User> PostNewUser([FromBody] UserDTO user)
         {
             var myUser = new User();
             myUser.FirstName = user.FirstName;
@@ -96,9 +97,10 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPatch("{id}")]
+        // TODO Should return UserDTO
         public ActionResult<User> PatchExistingUser(
             int id,
-            [FromBody] ApiModels.User user)
+            [FromBody] UserDTO user)
         {
             throw new NotImplementedException();
         }

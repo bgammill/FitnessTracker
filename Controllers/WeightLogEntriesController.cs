@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FitnessTracker.DTOs;
 using FitnessTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ namespace FitnessTracker.Controllers
     public class WeightLogEntriesController : ControllerBase
     {
         [HttpGet("{id}/weightlogentries")]
-        public ActionResult<ApiModels.WeightLogEntries> GetUserWeightHistory(int id)
+        public ActionResult<WeightLogEntriesDTO> GetUserWeightHistory(int id)
         {
             using (var db = new SqliteContext())
             {
@@ -22,12 +23,12 @@ namespace FitnessTracker.Controllers
                         .Select(x => new { x.Weights })
                         .ToList()[0];
 
-                    var rv = new ApiModels.WeightLogEntries();
-                    rv.Entries = new List<ApiModels.WeightLogEntry>();
+                    var rv = new WeightLogEntriesDTO();
+                    rv.Entries = new List<WeightLogEntryDTO>();
 
                     foreach (var weightLogEntry in user.Weights)
                     {
-                        rv.Entries.Add(new ApiModels.WeightLogEntry
+                        rv.Entries.Add(new WeightLogEntryDTO
                         {
                             Timestamp = weightLogEntry.Timestamp.ToString(),
                             Value = weightLogEntry.Weight
@@ -46,7 +47,7 @@ namespace FitnessTracker.Controllers
         [HttpPost("{id}/weightlogentries")]
         public ActionResult PostUserWeightLogEntry(
             int id,
-            [FromBody] ApiModels.WeightLogEntry weightLogEntry)
+            [FromBody] WeightLogEntryDTO weightLogEntry)
         {
             using (var db = new SqliteContext())
             {

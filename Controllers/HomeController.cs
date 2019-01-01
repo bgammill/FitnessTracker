@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using FitnessTracker.Models;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
+using FitnessTracker.DTOs;
 
 namespace FitnessTracker.Controllers
 {
@@ -14,9 +15,9 @@ namespace FitnessTracker.Controllers
     public class HomeController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<ApiModels.Home> Get(int id)
+        public ActionResult<HomeDTO> Get(int id)
         {
-            return new ApiModels.Home
+            return new HomeDTO
             {
                 Users = $"{this.Request.Scheme}:{this.Request.Host}/api/users",
                 Foods = $"{this.Request.Scheme}:{this.Request.Host}/api/foods",

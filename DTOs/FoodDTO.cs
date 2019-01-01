@@ -1,9 +1,12 @@
 using FitnessTracker.Models.Enums;
 
-namespace FitnessTracker.ApiModels
+namespace FitnessTracker.DTOs
 {
-    public class Food
+    public class FoodDTO
     {
+        // TODO Should this be optional for creates?
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string ServingSize { get; set; }

@@ -1,8 +1,8 @@
 using FitnessTracker.Models.Enums;
 
-namespace FitnessTracker.ApiModels
+namespace FitnessTracker.DTOs
 {
-    public class User
+    public class UserDTO
     {
         public int Id { get; set; }
 

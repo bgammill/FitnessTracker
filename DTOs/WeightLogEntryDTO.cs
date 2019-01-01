@@ -1,6 +1,6 @@
-namespace FitnessTracker.ApiModels
+namespace FitnessTracker.DTOs
 {
-    public class WeightLogEntry
+    public class WeightLogEntryDTO
     {
         public string Timestamp { get; set; }
 

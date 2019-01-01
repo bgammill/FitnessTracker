@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using FitnessTracker.DTOs;
 using FitnessTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,7 @@ namespace FitnessTracker.Controllers
     public class FoodsController : ControllerBase
     {
         [HttpPost]
-        public ActionResult<ApiModels.Food> PostNewFood([FromBody] ApiModels.Food food)
+        public ActionResult<FoodDTO> PostNewFood([FromBody] FoodDTO food)
         {
             var myFood = new Food();
             myFood.Name = food.Name;
@@ -24,12 +25,12 @@ namespace FitnessTracker.Controllers
             {
                 db.Foods.Add(myFood);
                 db.SaveChanges();
-                return food; // TODO Why bother even doing this?
+                return food; // TODO Should a "location header" be returned instead?
             }
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ApiModels.Food> GetFood(int id)
+        public ActionResult<FoodDTO> GetFood(int id)
         {
             using (var db = new SqliteContext())
             {
@@ -37,8 +38,9 @@ namespace FitnessTracker.Controllers
                 {
                     var food = db.Foods.FirstOrDefault(x => x.Id == id);
 
-                    return new ApiModels.Food
+                    return new FoodDTO
                     {
+                        Id = food.Id,
                         Name = food.Name,
                         ServingSize = food.ServingSize,
                         ProteinAmount = food.ProteinAmount,

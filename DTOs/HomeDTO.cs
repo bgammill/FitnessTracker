@@ -1,6 +1,6 @@
-namespace FitnessTracker.ApiModels
+namespace FitnessTracker.DTOs
 {
-    public class Home
+    public class HomeDTO
     {
         public string Users { get; set; }
 
