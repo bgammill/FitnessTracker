@@ -15,7 +15,7 @@ namespace FitnessTracker.Controllers
     public class HomeController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<HomeDTO> Get(int id)
+        public ActionResult<HomeDTO> Get()
         {
             return new HomeDTO
             {

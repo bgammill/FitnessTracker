@@ -49,6 +49,9 @@ namespace FitnessTracker.Controllers
             }
         }
 
+        /// <summary>
+        ///  TODO Example documentation.
+        /// </summary>
         [HttpGet("{id}")]
         public ActionResult<UserDTO> GetUser(int id)
         {
