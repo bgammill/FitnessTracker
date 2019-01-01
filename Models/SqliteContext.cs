@@ -15,7 +15,14 @@ namespace FitnessTracker.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=blogging.db");
+            // optionsBuilder.UseSqlite("Data Source=blogging.db");
+            
+            string Host = "10.0.0.6";
+            string Database = "testdb";
+            string Username = "testuser";
+            string Password = "testpassword";
+
+            optionsBuilder.UseNpgsql($"Host={Host};Database={Database};Username={Username};Password={Password}");
         }
     }
 }

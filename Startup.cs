@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using FitnessTracker.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +34,10 @@ namespace FitnessTracker
             // TODO Do I need this here? (https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio-code)
             // services.AddDbContext<TodoContext>(opt =>
             //     opt.UseInMemoryDatabase("TodoList"));
+
+            services.AddEntityFrameworkNpgsql()
+               .AddDbContext<SqliteContext>()
+               .BuildServiceProvider();
 
             services
                 .AddMvc()

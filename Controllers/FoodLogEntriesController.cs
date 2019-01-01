@@ -12,7 +12,10 @@ namespace FitnessTracker.Controllers
     public class FoodLogEntriesController : ControllerBase
     {
         [HttpGet("{id}/foodlogentries")]
-        public ActionResult<FoodLogEntriesDTO> GetUserFoodHistory(int id)
+        public ActionResult<FoodLogEntriesDTO> GetUserFoodHistory(
+            int id,
+            DateTime? startTime,
+            DateTime? endTime)
         {
             using (var db = new SqliteContext())
             {
@@ -35,7 +38,18 @@ namespace FitnessTracker.Controllers
                             ServingAmount = foodLogEntry.ServingAmount
                         };
 
-                        dto.Entries.Add(entry);
+                        if (foodLogEntry.Timestamp < startTime)
+                        {
+                            continue;
+                        }
+                        else if (foodLogEntry.Timestamp > endTime)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            dto.Entries.Add(entry);
+                        }
                     }
 
                     return dto;
