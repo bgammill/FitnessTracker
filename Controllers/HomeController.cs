@@ -14,9 +14,9 @@ namespace FitnessTracker.Controllers
     public class HomeController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<ApiModels.HomePage> Get(int id)
+        public ActionResult<ApiModels.Home> Get(int id)
         {
-            return new ApiModels.HomePage
+            return new ApiModels.Home
             {
                 Users = $"{this.Request.Scheme}:{this.Request.Host}/api/users",
                 Foods = $"{this.Request.Scheme}:{this.Request.Host}/api/foods",

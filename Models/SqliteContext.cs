@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Models
 {
-    public class UserContext : DbContext
+    public class SqliteContext : DbContext
     {
         public DbSet<User> Users { get; set; }
 
         public DbSet<WeightLogEntry> Weights { get; set; }
+
+        public DbSet<Food> Foods { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

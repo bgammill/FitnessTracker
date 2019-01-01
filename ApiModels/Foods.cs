@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace FitnessTracker.ApiModels
 {
-    public class Users
+    public class Foods
     {
-        public List<User> UserList { get; set; }
+        public List<Food> FoodList { get; set; }
     }
 }

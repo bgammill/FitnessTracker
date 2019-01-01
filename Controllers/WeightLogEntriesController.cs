@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using FitnessTracker.Models;
-using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Http;
-using FitnessTracker.Models.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
 {
@@ -17,7 +13,7 @@ namespace FitnessTracker.Controllers
         [HttpGet("{id}/weightlogentries")]
         public ActionResult<ApiModels.WeightLogEntries> GetUserWeightHistory(int id)
         {
-            using (var db = new UserContext())
+            using (var db = new SqliteContext())
             {
                 try
                 {
@@ -52,7 +48,7 @@ namespace FitnessTracker.Controllers
             int id,
             [FromBody] ApiModels.WeightLogEntry weightLogEntry)
         {
-            using (var db = new UserContext())
+            using (var db = new SqliteContext())
             {
                 var myWeight = new WeightLogEntry
                 {

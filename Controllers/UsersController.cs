@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using FitnessTracker.Models;
-using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Http;
-using FitnessTracker.Models.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
 {
@@ -17,7 +13,7 @@ namespace FitnessTracker.Controllers
         [HttpGet]
         public ActionResult<ApiModels.Users> GetAllUsers()
         {
-            using (var db = new UserContext())
+            using (var db = new SqliteContext())
             {
                 try
                 {
@@ -55,7 +51,7 @@ namespace FitnessTracker.Controllers
         [HttpGet("{id}")]
         public ActionResult<ApiModels.User> GetUser(int id)
         {
-            using (var db = new UserContext())
+            using (var db = new SqliteContext())
             {
                 try
                 {
@@ -83,6 +79,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPost]
+        // TODO Should return ApiModels.User
         public ActionResult<User> PostNewUser([FromBody] ApiModels.User user)
         {
             var myUser = new User();
@@ -90,7 +87,7 @@ namespace FitnessTracker.Controllers
             myUser.LastName = user.LastName;
             myUser.Email = user.Email;
 
-            using (var db = new UserContext())
+            using (var db = new SqliteContext())
             {
                 db.Users.Add(myUser);
                 db.SaveChanges();
@@ -98,10 +95,18 @@ namespace FitnessTracker.Controllers
             }
         }
 
+        [HttpPatch("{id}")]
+        public ActionResult<User> PatchExistingUser(
+            int id,
+            [FromBody] ApiModels.User user)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpDelete("{id}")]
         public StatusCodeResult DeleteUser(int id)
         {
-            using (var db = new UserContext())
+            using (var db = new SqliteContext())
             {
                 try
                 {

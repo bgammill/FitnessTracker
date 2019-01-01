@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Models
 {
@@ -12,5 +7,15 @@ namespace FitnessTracker.Models
         [Key] public int Id { get; set; }
 
         [Required] public string Name { get; set; }
+
+        [Required] public string ServingSize { get; set; }
+
+        [Required] public double ProteinAmount { get; set; }
+
+        [Required] public double FatAmount { get; set; }
+
+        [Required] public double CarbohydrateAmount { get; set; }
+
+        [Required] public int Calories { get; set; }
     }
 }
