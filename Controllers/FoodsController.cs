@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FitnessTracker.DTOs;
 using FitnessTracker.Models;
@@ -26,6 +27,43 @@ namespace FitnessTracker.Controllers
                 db.Foods.Add(myFood);
                 db.SaveChanges();
                 return food; // TODO Should a "location header" be returned instead?
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<FoodsDTO> GetAllFoods(string name = "")
+        {
+            using (var db = new SqliteContext())
+            {
+                try
+                {
+                    var foods = db.Foods.Where(x => x.Name.ToLower().Contains(name.ToLower()));
+
+                    var dto = new FoodsDTO();
+                    dto.FoodList = new List<FoodDTO>();
+
+                    foreach (var food in foods)
+                    {
+                        var entry = new FoodDTO
+                        {
+                            Id = food.Id,
+                            Name = food.Name,
+                            ServingSize = food.ServingSize,
+                            ProteinAmount = food.ProteinAmount,
+                            FatAmount = food.FatAmount,
+                            CarbohydrateAmount = food.CarbohydrateAmount,
+                            Calories = food.Calories,
+                        };
+
+                        dto.FoodList.Add(entry);
+                    }
+
+                    return dto;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return StatusCode(404);
+                }
             }
         }
 
