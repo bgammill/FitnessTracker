@@ -1,5 +1,5 @@
 # get initial image
-FROM microsoft/dotnet:sdk
+FROM microsoft/dotnet:sdk AS build-env
 
 # set the working directory
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN dotnet restore
 COPY . ./
 
 # build the project
-RUN dotnet publish -C release -o out
+RUN dotnet publish -c Release -o out
 
 # get asp image
 FROM microsoft/dotnet:aspnetcore-runtime
@@ -26,4 +26,4 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 # set entry point
-ENTRYPOINT ["dotnet", "aspnetapp.dll"]
+ENTRYPOINT ["dotnet", "FitnessTracker.dll"]
