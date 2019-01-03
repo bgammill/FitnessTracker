@@ -26,7 +26,7 @@ There are still many features to implement, each of which is designed around a p
 - ❌ Ability to add "goals" and progress metrics toward those goals
 - ❌ Track workouts in a similar way to Jefit
 - ❌ Testing and quality assurance
-- ❌ Docker build and easy containerization
+- ✅ Docker build and easy containerization
 - ❌ Authentication and security
 - ❌ Ability to choose which back-end SQL database to use
 - ❌ Localization support
